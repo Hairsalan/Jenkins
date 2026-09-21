@@ -2,22 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('No-op') {
             steps {
-                bat 'echo Build completed > build-output.txt'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                bat 'echo Tests completed'
+                bat 'dir'
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'build-output.txt', fingerprint: true
+            echo 'One way or another, I have finished'
+            deleteDir()
+        }
+
+        success {
+            echo 'I succeeded!'
+        }
+
+        unstable {
+            echo 'I am unstable :/'
+        }
+
+        failure {
+            echo 'I failed :('
+        }
+
+        changed {
+            echo 'Things were different before...'
         }
     }
 }
