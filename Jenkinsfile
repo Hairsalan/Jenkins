@@ -1,18 +1,23 @@
 pipeline {
     agent any
 
-    environment {
-        DISABLE_AUTH = 'true'
-        DB_ENGINE = 'sqlite'
-    }
-
     stages {
         stage('Build') {
             steps {
-                echo "Database engine is ${DB_ENGINE}"
-                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
-                bat 'set'
+                bat 'echo Build completed > build-output.txt'
             }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'echo Tests completed'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'build-output.txt', fingerprint: true
         }
     }
 }
